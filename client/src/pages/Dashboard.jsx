@@ -219,6 +219,12 @@ export default function Dashboard() {
                         ? new Date(idea.createdAt).toLocaleDateString()
                         : "N/A"}
                     </p>
+                    <p>
+                      <span className="font-semibold text-slate-900 dark:text-slate-100">
+                        AiScore:
+                      </span>{" "}
+                      {idea.aiScore !== undefined ? idea.aiScore : "N/A"}
+                    </p>
                   </div>
 
                   <div className="mt-6 flex flex-wrap gap-2">
@@ -240,6 +246,11 @@ export default function Dashboard() {
                         </button>
                       </>
                     )}
+                    {/* 
+                    <span className="rounded-2xl bg-slate-700 px-3 py-2 text-xs font-semibold text-white transition hover:bg-slate-600 dark:bg-slate-600 dark:hover:bg-slate-500">
+                      AiScore :{" "}
+                      {idea.aiScore !== undefined ? idea.aiScore : "N/A"}
+                    </span> */}
                     <button
                       type="button"
                       onClick={() => voteIdea(idea._id)}
