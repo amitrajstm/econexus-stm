@@ -1,90 +1,76 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
+import { FaMoon, FaSun, FaBars, FaTimes } from "react-icons/fa";
+import { isAdmin, isUser } from "../auth/roles";
 
-export default function Navbar() {
+export default function Navbar({ toggleTheme }) {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
-
   const [open, setOpen] = useState(false);
+  const userIsAdmin = isAdmin(user);
+  const userIsStandard = isUser(user);
+
+  const navItems = [
+    { label: "Home", path: "/" },
+    { label: "About", path: "/about" },
+    { label: "Contact", path: "/contact" },
+    { label: "Help", path: "/help" },
+  ];
 
   return (
-    <nav
-      className="
-      sticky top-0 z-50
-      backdrop-blur-lg
-      bg-white/70
-      border-b
-    "
-    >
-      <div
-        className="
-        max-w-7xl mx-auto
-        flex justify-between items-center
-        px-6 py-4
-      "
-      >
-        {/* LOGO */}
-
-        <h1
-          onClick={() => navigate("/")}
-          className="
-            text-2xl font-bold
-            text-emerald-700
-            cursor-pointer
-          "
-        >
-          🌱 EcoNexus
-        </h1>
-
-        {/* DESKTOP MENU */}
-
-        <div className="hidden md:flex gap-6 items-center">
+    <nav className="sticky top-0 z-50 border-b border-slate-200/70 bg-white/80 backdrop-blur-xl shadow-sm transition-colors duration-300 dark:border-slate-700/80 dark:bg-slate-950/80">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+        <div className="flex items-center gap-3">
           <button
             onClick={() => navigate("/")}
-            className="hover:text-emerald-600 font-medium"
+            className="text-2xl font-bold text-emerald-700 transition hover:text-emerald-600 dark:text-emerald-300"
           >
-            Home
+            🌱 EcoNexus
           </button>
+        </div>
+
+        <div className="hidden items-center gap-6 md:flex">
+          {navItems.map((item) => (
+            <button
+              key={item.path}
+              onClick={() => navigate(item.path)}
+              className="text-sm font-medium text-slate-700 transition hover:text-emerald-600 dark:text-slate-200 dark:hover:text-emerald-300"
+            >
+              {item.label}
+            </button>
+          ))}
 
           {user && (
             <>
               <button
-                onClick={() => navigate("/dashboard")}
-                className="hover:text-emerald-600 font-medium"
+                onClick={() => navigate(userIsAdmin ? "/admin" : "/dashboard")}
+                className="text-sm font-medium text-slate-700 transition hover:text-emerald-600 dark:text-slate-200 dark:hover:text-emerald-300"
               >
-                Dashboard
+                {userIsAdmin ? "Admin Dashboard" : "Dashboard"}
               </button>
-
-              <button
-                onClick={() => navigate("/submit")}
-                className="hover:text-emerald-600 font-medium"
-              >
-                Submit Idea
-              </button>
+              {userIsStandard && (
+                <button
+                  onClick={() => navigate("/submit")}
+                  className="text-sm font-medium text-slate-700 transition hover:text-emerald-600 dark:text-slate-200 dark:hover:text-emerald-300"
+                >
+                  Submit Idea
+                </button>
+              )}
             </>
           )}
-
-          {/* AUTH BUTTONS */}
 
           {!user ? (
             <>
               <button
                 onClick={() => navigate("/login")}
-                className="font-semibold hover:text-emerald-700"
+                className="text-sm font-semibold text-slate-700 transition hover:text-emerald-600 dark:text-slate-200 dark:hover:text-emerald-300"
               >
                 Login
               </button>
-
               <button
                 onClick={() => navigate("/register")}
-                className="
-                  bg-emerald-600 hover:bg-emerald-700
-                  text-white px-5 py-2
-                  rounded-xl
-                  shadow-md hover:shadow-xl
-                  transition
-                "
+                className="rounded-2xl bg-emerald-600 px-5 py-2 text-sm font-semibold text-white shadow-md transition hover:bg-emerald-500"
               >
                 Register
               </button>
@@ -92,57 +78,119 @@ export default function Navbar() {
           ) : (
             <button
               onClick={logout}
-              className="
-                bg-red-500 hover:bg-red-600
-                text-white px-4 py-2
-                rounded-xl
-              "
+              className="rounded-2xl bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:bg-red-600"
             >
               Logout
             </button>
           )}
+
+          <button
+            onClick={toggleTheme}
+            className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-slate-800 transition hover:bg-emerald-50 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
+            aria-label="Toggle dark mode"
+            title="Toggle theme"
+          >
+            <FaMoon className="dark:hidden" />
+            <FaSun className="hidden dark:block" />
+          </button>
         </div>
 
-        {/* MOBILE BUTTON */}
-
-        <button onClick={() => setOpen(!open)} className="md:hidden text-2xl">
-          ☰
+        <button
+          onClick={() => setOpen((current) => !current)}
+          className="inline-flex h-11 w-11 items-center justify-center rounded-2xl border border-slate-200 bg-slate-50 text-slate-800 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800 md:hidden"
+          aria-label="Toggle menu"
+        >
+          {open ? <FaTimes /> : <FaBars />}
         </button>
       </div>
 
-      {/* MOBILE MENU */}
-
       {open && (
-        <div className="md:hidden px-6 pb-4 flex flex-col gap-3">
-          <button onClick={() => navigate("/")}>Home</button>
-
-          {user && (
-            <>
-              <button onClick={() => navigate("/dashboard")}>Dashboard</button>
-
-              <button onClick={() => navigate("/submit")}>Submit Idea</button>
-            </>
-          )}
-
-          {!user ? (
-            <>
-              <button onClick={() => navigate("/login")}>Login</button>
-
+        <div className="border-t border-slate-200/70 bg-white/95 px-6 py-5 shadow-xl backdrop-blur-xl dark:border-slate-700/70 dark:bg-slate-950/95 md:hidden">
+          <div className="flex flex-col gap-3">
+            {navItems.map((item) => (
               <button
-                onClick={() => navigate("/register")}
-                className="bg-emerald-600 text-white py-2 rounded-lg"
+                key={item.path}
+                onClick={() => {
+                  navigate(item.path);
+                  setOpen(false);
+                }}
+                className="text-left text-sm font-medium text-slate-700 transition hover:text-emerald-600 dark:text-slate-200 dark:hover:text-emerald-300"
               >
-                Register
+                {item.label}
               </button>
-            </>
-          ) : (
+            ))}
+
+            {user && (
+              <>
+                <button
+                  onClick={() => {
+                    navigate(userIsAdmin ? "/admin" : "/dashboard");
+                    setOpen(false);
+                  }}
+                  className="text-left text-sm font-medium text-slate-700 transition hover:text-emerald-600 dark:text-slate-200 dark:hover:text-emerald-300"
+                >
+                  {userIsAdmin ? "Admin Dashboard" : "Dashboard"}
+                </button>
+                {userIsStandard && (
+                  <button
+                    onClick={() => {
+                      navigate("/submit");
+                      setOpen(false);
+                    }}
+                    className="text-left text-sm font-medium text-slate-700 transition hover:text-emerald-600 dark:text-slate-200 dark:hover:text-emerald-300"
+                  >
+                    Submit Idea
+                  </button>
+                )}
+              </>
+            )}
+
+            {!user ? (
+              <>
+                <button
+                  onClick={() => {
+                    navigate("/login");
+                    setOpen(false);
+                  }}
+                  className="text-left text-sm font-semibold text-slate-700 transition hover:text-emerald-600 dark:text-slate-200 dark:hover:text-emerald-300"
+                >
+                  Login
+                </button>
+                <button
+                  onClick={() => {
+                    navigate("/register");
+                    setOpen(false);
+                  }}
+                  className="rounded-2xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:bg-emerald-500"
+                >
+                  Register
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={() => {
+                  logout();
+                  setOpen(false);
+                }}
+                className="rounded-2xl bg-red-500 px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:bg-red-600"
+              >
+                Logout
+              </button>
+            )}
+
             <button
-              onClick={logout}
-              className="bg-red-500 text-white py-2 rounded-lg"
+              onClick={() => {
+                toggleTheme();
+                setOpen(false);
+              }}
+              className="inline-flex items-center gap-2 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm font-medium text-slate-800 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:bg-slate-800"
             >
-              Logout
+              <FaMoon className="dark:hidden" />
+              <FaSun className="hidden dark:block" />
+              <span className="dark:hidden">Dark mode</span>
+              <span className="hidden dark:block">Light mode</span>
             </button>
-          )}
+          </div>
         </div>
       )}
     </nav>

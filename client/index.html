@@ -24,6 +24,16 @@
 
     <!-- BRAND COLOR -->
     <meta name="theme-color" content="#10b981" />
+    <script>
+      (function () {
+        var theme = localStorage.getItem("theme");
+        if (theme === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      })();
+    </script>
 
     <!-- OPEN GRAPH (LinkedIn, WhatsApp, Facebook Preview) -->
     <meta property="og:title" content="EcoNexus | Green Innovation Platform" />

@@ -2,21 +2,43 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@keyframes fade {
-from {opacity:.4;}
-to {opacity:1;}
+
+:root {
+  color-scheme: light;
 }
 
-.animate-fade{
-animation:fade 1.2s ease-in-out;
+html.dark {
+  color-scheme: dark;
 }
-@keyframes fade{
-from{
-opacity:0;
-transform:translateY(20px);
+
+html {
+  scroll-behavior: smooth;
+  transition: background-color 0.3s, color 0.3s;
 }
-to{
-opacity:1;
-transform:translateY(0);
+
+body {
+  @apply bg-white text-slate-900 antialiased dark:bg-slate-950 dark:text-slate-100;
 }
+
+html,
+body,
+#root {
+  @apply min-h-screen transition-colors duration-300;
+}
+
+*,
+*::before,
+*::after {
+  transition-property: color, background-color, border-color, fill, stroke, text-decoration-color;
+  transition-duration: 300ms;
+  transition-timing-function: ease;
+}
+
+@keyframes fade {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
+.animate-fade {
+  animation: fade 1.2s ease-in-out;
 }
