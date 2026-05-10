@@ -7,7 +7,7 @@ const team = [
     role: "Founder / CEO",
     desc: "Leading our mission to connect sustainability innovators with partners and capital.",
     image:
-      "https://scontent.fixc4-5.fna.fbcdn.net/v/t39.30808-6/638346791_1225228093143322_3283679713834431266_n.jpg?_nc_cat=108&ccb=1-7&_nc_sid=7b2446&_nc_ohc=LQgPllzinnQQ7kNvwEdkf8k&_nc_oc=Adp_Uy7j9dNnYuvQ1lnCKSva5LwH0jEk-02TfSk0B5ffXPPjW5wtdIIKVAnkQPemNU5uN-F4xiwLl5KCFpPBsX3M&_nc_zt=23&_nc_ht=scontent.fixc4-5.fna&_nc_gid=vtA4rqQdwlFZGioqJ505dw&oh=00_Af0f98e-cxBTcjQM8ZTaMy8_s4IvFF3MTWFE3FzgFC_H0Q&oe=69F0D6C2",
+      "https://www.kabadiking.in/amitrajPic.png",
   },
   {
     name: "shubhendra chaturvedi",
